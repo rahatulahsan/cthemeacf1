@@ -6,68 +6,48 @@ get_header();
 
 
 ?>
-<section class="breadcumb-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="breadcumb">
-                    <h4>About Us</h4>
-                    <ul>
-                        <li><a href=""></a>Home</li> / 
-                        <li>About Us</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<?php require_once('inc/breadcumb.php'); ?>
 
 <!-- About Area Start -->
 <section class="about-area pt-100 pb-100" id="about">
          <div class="container">
-            <div class="row">
-               <div class="col-md-7">
-                  <div class="about">
-                     <div class="page-title">
-                        <h4>welcome to Efrekia</h4>
-                     </div>
-                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry typesetting industry </p>
-                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda distinctio maxime laborum delectus aliquam ipsum itaque voluptatem non reiciendis aliquid totam facere, tempora iure iusto adipisci doloremque in, amet, alias nostrum. Explicabo reprehenderit.</p>
-                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry typesetting industry </p>
+         <div class="row">
+            <div class="col-md-7">
+               <div class="about">
+                  <?php 
+                                    
+                  $about_content = get_field('about_content', 'option');
+                  
+                  ?>
+                  <div class="page-title">
+                     <h4><?php echo $about_content['main_heading']; ?></h4>
                   </div>
+                  <p><?php echo $about_content['main_description']; ?> </p>
+                  
                </div>
-               <div class="col-md-5">
+            </div>
+            <div class="col-md-5">
+
+               <?php 
+               
+               $about_features = get_field('about_features', 'options');
+
+               foreach($about_features as $about_feature){ ?>
+
                   <div class="single_about">
-                     <i class="fa fa-laptop"></i>
-                     <h4>our mission</h4>
-                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry typesetting industry </p>
+                     <i class="<?php echo $about_feature['feature_icon']; ?>"></i>
+                     <h4><?php echo $about_feature['feature_name']; ?></h4>
+                     <p><?php echo $about_feature['feature_description']; ?> </p>
                   </div>
-                  <div class="single_about">
-                     <i class="fa fa-user"></i>
-                     <h4>our vission</h4>
-                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry typesetting industry </p>
-                  </div>
-                  <div class="single_about">
-                     <i class="fa fa-pencil"></i>
-                     <h4>our history</h4>
-                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry typesetting industry </p>
-                  </div>
-               </div>
+
+               <?php }
+               
+               ?>
+                  
+             </div>
             </div>
          </div>
       </section>
       <!-- About Area End -->
- <!-- CTA Area Start -->
- <section class="cta">
-   <div class="container">
-      <div class="row">
-         <div class="col-md-6">
-            <h4>best solution for your business <span>the can be used on larger scale projectss as well as small scale projectss</span></h4>
-         </div>
-         <div class="col-md-6 text-center">
-            <a href="#" class="box-btn">contact us <i class="fa fa-angle-double-right"></i></a>
-         </div>
-      </div>
-   </div>
-</section>
+ 
 <?php get_footer(); ?>

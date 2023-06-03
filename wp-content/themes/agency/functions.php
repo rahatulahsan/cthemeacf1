@@ -39,7 +39,7 @@ add_action('wp_enqueue_scripts', 'efrekia_assets');
 
 function efrekia_setup_theme(){
     add_theme_support('title-tag');
-    add_theme_support( 'post-thumbnails', array('post', 'sliders', 'teams', 'testimonials', 'portfolios') );
+    add_theme_support( 'post-thumbnails', array('post', 'sliders', 'teams', 'testimonials', 'portfolio', 'gallery') );
     load_theme_textdomain( 'efrekia', get_template_directory_uri(). '/languages' );
 
     //register a menu
@@ -148,8 +148,26 @@ function efrekia_custom_posts(){
         'menu_icon' => 'dashicons-admin-comments'
     ));
 
+    // custom posts for Gallery
+    register_post_type('gallery', array(
+        'labels' => array(
+            'name' => __('Galleries', 'efrekia'),
+            'singular_name' => __('Gallery', 'efrekia'),
+            'add_new_item' => __('Add New Gallery', 'efrekia'),
+            'edit_item' => __('Edit Gallery', 'efrekia'),
+            'new_item' => __('New Gallery', 'efrekia'),
+            'new_items' => __('New Gallery', 'efrekia'),
+            
+        ),
+        'public' => true,
+        'show_ui' => true,
+        'supports' => array('title', 'thumbnail', 'custom-fields'),
+        'show_in_rest' => true,
+        'menu_icon' => 'dashicons-admin-comments'
+    ));
+
     // custom posts for Portfolio
-    register_post_type('portfolios', array(
+    register_post_type('portfolio', array(
         'labels' => array(
             'name' => __('Portfolios', 'efrekia'),
             'singular_name' => __('Portfolio', 'efrekia'),
@@ -161,13 +179,13 @@ function efrekia_custom_posts(){
         ),
         'public' => true,
         'show_ui' => true,
-        'supports' => array('title', 'thumbnail', 'custom-fields'),
+        'supports' => array('title', 'editor','thumbnail', 'custom-fields'),
         'show_in_rest' => true,
         'menu_icon' => 'dashicons-format-gallery',
     ));
     
     // Register Taxonomy for Portfolio Post Type
-    register_taxonomy( 'portfolio-cat', 'portfolios', array(
+    register_taxonomy( 'portfolio-cat', 'portfolio', array(
         'labels' => array(
             'name' => __('Categories', 'efrekia'),
             'singular_name' => __('Category', 'efrekia')
@@ -186,6 +204,66 @@ function efrekia_custom_posts(){
 }
 
 add_action('init', 'efrekia_custom_posts');
+
+
+/**
+ * Add a sidebar.
+ */
+function efrekia_widgets_init() {
+	register_sidebar( array(
+		'name'          => __( 'Main Sidebar', 'efrekia' ),
+		'id'            => 'sidebar-1',
+		'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'efrekia' ),
+		'before_widget' => '<div class="single-sidebar">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h4>',
+		'after_title'   => '</h4>'
+	) );
+    register_sidebar( array(
+		'name'          => __( 'Footer Sidebar', 'efrekia' ),
+		'id'            => 'footer-1',
+		'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'efrekia' ),
+		'before_widget' => '<div class="single-footer">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h4>',
+		'after_title'   => '</h4>'
+	) );
+
+    // Logo Widget Sidebar
+    register_sidebar( array(
+		'name'          => __( 'Footer Sidebar', 'efrekia' ),
+		'id'            => 'footer-1',
+		'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'efrekia' ),
+		'before_widget' => '<div class="single-footer footer-logo">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h3>',
+		'after_title'   => '</h3>'
+	) );
+
+    // 2nd sidebar for Quick Page Links
+    register_sidebar( array(
+		'name'          => __( 'Quick Links Sidebar', 'efrekia' ),
+		'id'            => 'footer-2',
+		'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'efrekia' ),
+		'before_widget' => '<div class="single-footer">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h4>',
+		'after_title'   => '</h4>'
+	) );
+    // 3rd sidebar for Latest Post Links
+    register_sidebar( array(
+        'name'          => __( 'Post Links Sidebar', 'efrekia' ),
+        'id'            => 'footer-3',
+        'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'efrekia' ),
+        'before_widget' => '<div class="single-footer">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+    ) );
+}
+add_action( 'widgets_init', 'efrekia_widgets_init' );
+
+
 
 // Adding CSS options for ACF
 function acf_css(){?>
@@ -244,10 +322,22 @@ if( function_exists('acf_add_options_page') ) {
         'menu_title'    => 'Footer',
         'parent_slug'   => 'theme-general-settings',
     ));
+    acf_add_options_sub_page(array(
+        'page_title'    => 'Contact Settings',
+        'menu_title'    => 'Contact',
+        'parent_slug'   => 'theme-general-settings',
+    ));
     
 }
 
-
+function efrekia_move_comment_field_to_bottom( $fields ) {
+    $comment_field = $fields['comment'];
+    unset( $fields['comment'] );
+    $fields['comment'] = $comment_field;
+    return $fields;
+}
+     
+add_filter( 'comment_form_fields', 'efrekia_move_comment_field_to_bottom' );
 
 
 
