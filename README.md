@@ -1,6 +1,6 @@
 # cthemeacf1
 Custom Theme Development with Advanced Custom Field Pro (ACF Pro)
-=====Features=====
+
 1. Multiple Pages
 2. Hero Slider
 3. Dynamic Contact Form
